@@ -165,6 +165,8 @@ gap:20px;
 overflow:hidden;
 padding-bottom:20px;
 transition:.3s;
+display:flex;
+flex-direction:column;
 }
 
 .project-card:hover{
@@ -182,8 +184,14 @@ object-fit:cover;
 padding:15px;
 }
 
+.project-card p{
+flex-grow:1;
+}
+
 .project-card button{
 margin-left:15px;
+margin-top:auto;
+align-self:flex-start;
 padding:10px 20px;
 border:none;
 border-radius:20px;
@@ -354,6 +362,105 @@ font-size:26px;
 
 }
 
+/* ===== PROJECT MODAL ===== */
+
+.modal-overlay{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.7);
+backdrop-filter:blur(5px);
+z-index:2000;
+justify-content:center;
+align-items:center;
+padding:30px;
+}
+
+.modal-overlay.open{
+display:flex;
+}
+
+.modal-box{
+background:linear-gradient(135deg,#1a1a3d,#2d1b4e);
+border:1px solid rgba(255,255,255,.15);
+border-radius:20px;
+max-width:700px;
+width:100%;
+max-height:85vh;
+overflow-y:auto;
+position:relative;
+animation:modalPop .25s ease;
+}
+
+@keyframes modalPop{
+from{opacity:0;transform:scale(.92);}
+to{opacity:1;transform:scale(1);}
+}
+
+.modal-close{
+position:absolute;
+top:15px;
+right:20px;
+font-size:28px;
+cursor:pointer;
+color:white;
+background:rgba(255,255,255,.15);
+width:40px;
+height:40px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+line-height:1;
+z-index:10;
+}
+
+.modal-close:hover{
+background:rgba(255,255,255,.3);
+}
+
+.modal-box img{
+width:100%;
+max-height:400px;
+object-fit:cover;
+border-radius:20px 20px 0 0;
+display:block;
+}
+
+.modal-box h3{
+font-family:'Black Ops One',cursive;
+font-size:26px;
+padding:25px 30px 10px;
+}
+
+.modal-box p{
+padding:0 30px 30px;
+font-size:16px;
+line-height:1.6;
+color:rgba(255,255,255,.85);
+}
+
+@media (max-width:600px){
+
+.modal-box h3{
+font-size:20px;
+padding:20px 20px 8px;
+}
+
+.modal-box p{
+padding:0 20px 25px;
+font-size:14px;
+}
+
+.modal-box img{
+max-height:220px;
+}
+
+}
+
 </style>
 
 </head>
@@ -492,35 +599,35 @@ Teamwork
 <img src="images/project1.jpg">
 <h3>Barcode-Based Attendance Monitoring System</h3>
 <p>An IoT attendance system using barcode scanning for students, with real-time tracking, admin dashboard, and SMS notifications.</p>
-<button>View Project</button>
+<button onclick="openProjectModal('images/project1.jpg','Barcode-Based Attendance Monitoring System','An IoT attendance system using barcode scanning for students, with real-time tracking, admin dashboard, and SMS notifications.')">View Project</button>
 </div>
 
 <div class="project-card">
 <img src="images/project2.jpg">
 <h3>Smart Rain-Sensing Clothesline</h3>
 <p>IoT automatic clothesline that detects rain and retracts to protect clothes using Arduino, rain sensor, and servo motor.</p>
-<button>View Project</button>
+<button onclick="openProjectModal('images/project2.jpg','Smart Rain-Sensing Clothesline','IoT automatic clothesline that detects rain and retracts to protect clothes using Arduino, rain sensor, and servo motor.')">View Project</button>
 </div>
 
 <div class="project-card">
 <img src="images/project3.jpg">
 <h3>ReviewDay - Review Planner</h3>
 <p>Simple mobile app to organize review tasks, track deadlines, and get reminders — helping students avoid cramming for exams and quizzes.</p>
-<button>View Project</button>
+<button onclick="openProjectModal('images/project3.jpg','ReviewDay - Review Planner','Simple mobile app to organize review tasks, track deadlines, and get reminders — helping students avoid cramming for exams and quizzes.')">View Project</button>
 </div>
 
 <div class="project-card">
 <img src="images/project4.jpg">
 <h3>Inventory Management System</h3>
 <p>Mobile & desktop app for efficient inventory tracking of uniforms and merchandise. Allows quick data entry, automatic Excel export, and real-time database management.</p>
-<button>View Project</button>
+<button onclick="openProjectModal('images/project4.jpg','Inventory Management System','Mobile &amp; desktop app for efficient inventory tracking of uniforms and merchandise. Allows quick data entry, automatic Excel export, and real-time database management.')">View Project</button>
 </div>
 
 <div class="project-card">
 <img src="images/project5.jpg">
 <h3>Grocery List App</h3>
 <p>Simple app to add, edit, delete, and mark grocery items. Enter prices for auto total calculation and budget warnings. Lists save automatically.</p>
-<button>View Project</button>
+<button onclick="openProjectModal('images/project5.jpg','Grocery List App','Simple app to add, edit, delete, and mark grocery items. Enter prices for auto total calculation and budget warnings. Lists save automatically.')">View Project</button>
 </div>
 
 </div>
@@ -606,6 +713,36 @@ Have a project in mind or looking for a dedicated UI/UX Designer and QA Tester? 
 <footer>
 © 2025 Andrea Lachica. All Rights Reserved.
 </footer>
+
+<!-- PROJECT MODAL -->
+
+<div class="modal-overlay" id="projectModal" onclick="if(event.target===this)closeProjectModal()">
+<div class="modal-box">
+<div class="modal-close" onclick="closeProjectModal()">×</div>
+<img id="modalImg" src="" alt="">
+<h3 id="modalTitle"></h3>
+<p id="modalDesc"></p>
+</div>
+</div>
+
+<script>
+function openProjectModal(img, title, desc){
+document.getElementById('modalImg').src = img;
+document.getElementById('modalTitle').innerHTML = title;
+document.getElementById('modalDesc').innerHTML = desc;
+document.getElementById('projectModal').classList.add('open');
+document.body.style.overflow = 'hidden';
+}
+
+function closeProjectModal(){
+document.getElementById('projectModal').classList.remove('open');
+document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', function(e){
+if(e.key === 'Escape') closeProjectModal();
+});
+</script>
 
 </body>
 </html>
